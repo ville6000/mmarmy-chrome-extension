@@ -53,12 +53,7 @@ const recordBreakdown = rows => {
   const breakdown = [];
 
   rows.forEach((el, idx) => {
-    const tdClasses = el.querySelector("td:first-child").classList;
-    const key =
-      tdClasses.contains("win") || tdClasses.contains("winTitle")
-        ? "wins"
-        : "losses";
-
+    const key = isWin(el) ? "wins" : "losses";
     const result = el.querySelectorAll("td").item(5).textContent;
     let resultKey = "ko";
 
