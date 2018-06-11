@@ -16,6 +16,8 @@ const init = () => {
     createRecordByOrganizationMarkup(recordByOrganization(rows))
   );
 
+  container.appendChild(createNemesisListMarkup(nemesisList(rows)));
+
   const recordTable = document.querySelectorAll(".record");
 
   document.querySelector(".middle .b").insertBefore(container, recordTable[0]);
@@ -157,6 +159,60 @@ const createRecordByOrganizationMarkup = record => {
   Object.keys(record).forEach(key => {
     let item = document.createElement("div");
     item.textContent = `${key}: ${record[key].wins} - ${record[key].losses}`;
+
+    container.appendChild(item);
+  });
+
+  return container;
+};
+
+/**
+ * Create nemesis list.
+ *
+ * @param {NodeList} rows List of table rows
+ */
+const nemesisList = rows => {
+  const record = [];
+
+  rows.forEach(el => {
+    const key = isWin(el) ? "wins" : "losses";
+    const opponent = el.querySelector("td a").textContent;
+
+    if (typeof record[opponent] === "undefined") {
+      record[opponent] = {
+        wins: 0,
+        losses: 0
+      };
+    }
+
+    record[opponent][key]++;
+  });
+
+  const approved = [];
+  Object.keys(record).forEach(key => {
+    if (record[key].wins + record[key].losses >= 3) {
+      approved[key] = record[key];
+    }
+  });
+
+  return approved;
+};
+
+/**
+ * Create nemesis list markup.
+ * @param {object} nemesisList
+ */
+const createNemesisListMarkup = nemesisList => {
+  const container = document.createElement("div");
+  const title = document.createElement("h4");
+  title.textContent = "Nemesis list";
+  container.appendChild(title);
+
+  Object.keys(nemesisList).forEach(key => {
+    let item = document.createElement("div");
+    item.textContent = `${key}: ${nemesisList[key].wins} - ${
+      nemesisList[key].losses
+    }`;
 
     container.appendChild(item);
   });
