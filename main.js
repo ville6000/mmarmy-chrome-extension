@@ -9,8 +9,7 @@ const init = () => {
   }
   const container = document.createElement("div");
 
-  const breakdown = recordBreakdown(rows);
-  container.appendChild(createRecordBreakdownMarkup(breakdown));
+  container.appendChild(createRecordBreakdownMarkup(recordBreakdown(rows)));
 
   container.appendChild(
     createRecordByOrganizationMarkup(recordByOrganization(rows))
@@ -19,7 +18,6 @@ const init = () => {
   container.appendChild(createNemesisListMarkup(nemesisList(rows)));
 
   const recordTable = document.querySelectorAll(".record");
-
   document.querySelector(".middle .b").insertBefore(container, recordTable[0]);
 };
 
@@ -124,6 +122,7 @@ const createRecordBreakdownMarkup = breakdown => {
 
 /**
  * Create record by organization object
+ *
  * @param {NodeList} rows List of table rows
  */
 const recordByOrganization = rows => {
@@ -148,6 +147,7 @@ const recordByOrganization = rows => {
 
 /**
  * Create markup for record by organization
+ *
  * @param {object} record
  */
 const createRecordByOrganizationMarkup = record => {
@@ -200,6 +200,7 @@ const nemesisList = rows => {
 
 /**
  * Create nemesis list markup.
+ *
  * @param {object} nemesisList
  */
 const createNemesisListMarkup = nemesisList => {
