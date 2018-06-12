@@ -17,6 +17,8 @@ const init = () => {
 
   container.appendChild(createNemesisListMarkup(nemesisList(rows)));
 
+  container.appendChild(createStreaksMarkup(streaks(rows)));
+
   const recordTable = document.querySelectorAll(".record");
   document.querySelector(".middle .b").insertBefore(container, recordTable[0]);
 };
@@ -215,6 +217,53 @@ const createNemesisListMarkup = nemesisList => {
       nemesisList[key].losses
     }`;
 
+    container.appendChild(item);
+  });
+
+  return container;
+};
+
+/**
+ * Calculate streaks object
+ *
+ * @param {NodeList} rows List of table rows
+ */
+const streaks = rows => {
+  const record = {
+    wins: 0,
+    losses: 0
+  };
+
+  let lastResult = false;
+  let currentStreak = 0;
+
+  rows.forEach(el => {
+    let key = isWin(el) ? "wins" : "losses";
+    currentStreak = lastResult === key ? currentStreak + 1 : 1;
+    lastResult = key;
+
+    if (record[key] < currentStreak) {
+      record[key] = currentStreak;
+    }
+  });
+
+  return record;
+};
+
+/**
+ * Create streaks markup
+ *
+ * @params {object} Streaks object containing keys for wins and losses
+ */
+const createStreaksMarkup = streaks => {
+  const container = document.createElement("div");
+  const title = document.createElement("h4");
+  title.textContent = "Streaks";
+  container.appendChild(title);
+
+  Object.keys(streaks).forEach(key => {
+    let item = document.createElement("div");
+    item.textContent = `${key}: ${streaks[key]}`;
     container.appendChild(item);
   });
 
