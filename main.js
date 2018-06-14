@@ -39,11 +39,7 @@ const isWin = el => {
 const getRecordRows = () => {
   let recordTable = document.querySelectorAll(".record tr:not(:first-child)");
 
-  if (recordTable.length === 0) {
-    return false;
-  }
-
-  return recordTable;
+  return recordTable.length === 0 ? false : recordTable;
 };
 
 /**
@@ -52,7 +48,18 @@ const getRecordRows = () => {
  * @param {NodeList} rows List of table rows
  */
 const recordBreakdown = rows => {
-  const breakdown = [];
+  const breakdown = {
+    wins: {
+      decision: 0,
+      submission: 0,
+      ko: 0
+    },
+    losses: {
+      decision: 0,
+      submission: 0,
+      ko: 0
+    }
+  };
 
   rows.forEach((el, idx) => {
     const key = isWin(el) ? "wins" : "losses";
@@ -63,14 +70,6 @@ const recordBreakdown = rows => {
       resultKey = "decision";
     } else if (result.indexOf("Submission") >= 0) {
       resultKey = "submission";
-    }
-
-    if (typeof breakdown[key] === "undefined") {
-      breakdown[key] = {
-        decision: 0,
-        submission: 0,
-        ko: 0
-      };
     }
 
     breakdown[key][resultKey]++;
