@@ -206,6 +206,11 @@ const nemesisList = rows => {
  */
 const createNemesisListMarkup = nemesisList => {
   const container = document.createElement("div");
+
+  if (Object.keys(nemesisList).length === 0) {
+    return container;
+  }
+
   const title = document.createElement("h4");
   title.textContent = "Nemesis list";
   container.appendChild(title);
