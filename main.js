@@ -19,6 +19,8 @@ const init = () => {
 
   container.appendChild(createStreaksMarkup(streaks(rows)));
 
+  container.appendChild(createStyleBreakdownMarkup(styleBreakdown(rows)));
+
   const recordTable = document.querySelectorAll(".record");
   document.querySelector(".middle .b").insertBefore(container, recordTable[0]);
 };
@@ -269,6 +271,60 @@ const createStreaksMarkup = streaks => {
     let item = document.createElement("div");
     item.textContent = `${key}: ${streaks[key]}`;
     container.appendChild(item);
+  });
+
+  return container;
+};
+
+/**
+ * Calculate style breakdown
+ *
+ * @param {NodeList} rows List of table rows
+ */
+const styleBreakdown = rows => {
+  const styles = {};
+
+  rows.forEach(el => {
+    const style = el.querySelectorAll("td").item(1).textContent;
+    const opponentStyle = el.querySelectorAll("td").item(3).textContent;
+
+    if (typeof styles[style] === "undefined") {
+      styles[style] = {};
+    }
+
+    if (typeof styles[style][opponentStyle] === "undefined") {
+      styles[style][opponentStyle] = {
+        wins: 0,
+        losses: 0
+      };
+    }
+
+    styles[style][opponentStyle][isWin(el) ? "wins" : "losses"]++;
+  });
+
+  return styles;
+};
+
+/**
+ * Create style breakdown markup
+ *
+ * @param {object} styles
+ */
+const createStyleBreakdownMarkup = styles => {
+  const container = document.createElement("div");
+  const title = document.createElement("h4");
+  title.textContent = "Style Breakdown";
+  container.appendChild(title);
+
+  Object.keys(styles).forEach(styleKey => {
+    Object.keys(styles[styleKey]).forEach(opponenStyleKey => {
+      let item = document.createElement("div");
+      item.textContent = `${styleKey} - ${opponenStyleKey} 
+      ${styles[styleKey][opponenStyleKey]["wins"]} - 
+      ${styles[styleKey][opponenStyleKey]["losses"]}`;
+
+      container.appendChild(item);
+    });
   });
 
   return container;
