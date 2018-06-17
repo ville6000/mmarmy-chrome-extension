@@ -316,16 +316,41 @@ const createStyleBreakdownMarkup = styles => {
   title.textContent = "Style Breakdown";
   container.appendChild(title);
 
+  const table = document.createElement("table");
+
   Object.keys(styles).forEach(styleKey => {
     Object.keys(styles[styleKey]).forEach(opponenStyleKey => {
-      let item = document.createElement("div");
-      item.textContent = `${styleKey} - ${opponenStyleKey} 
-      ${styles[styleKey][opponenStyleKey]["wins"]} - 
-      ${styles[styleKey][opponenStyleKey]["losses"]}`;
+      let row = document.createElement("tr");
 
-      container.appendChild(item);
+      let cell = document.createElement("td");
+      cell.textContent = styleKey;
+      row.appendChild(cell);
+
+      cell = document.createElement("td");
+      cell.textContent = " - ";
+      row.appendChild(cell);
+
+      cell = document.createElement("td");
+      cell.textContent = opponenStyleKey;
+      row.appendChild(cell);
+
+      cell = document.createElement("td");
+      cell.textContent = styles[styleKey][opponenStyleKey]["wins"];
+      row.appendChild(cell);
+
+      cell = document.createElement("td");
+      cell.textContent = " - ";
+      row.appendChild(cell);
+
+      cell = document.createElement("td");
+      cell.textContent = styles[styleKey][opponenStyleKey]["losses"];
+      row.appendChild(cell);
+
+      table.appendChild(row);
     });
   });
+
+  container.appendChild(table);
 
   return container;
 };
