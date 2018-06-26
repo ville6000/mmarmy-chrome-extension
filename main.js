@@ -26,30 +26,74 @@ const init = () => {
 };
 
 /**
- * Is current table row win or title win
+ * Create Fight object
  *
  * @param {Node} el Table row
  */
-const isWin = el => {
-  const tdClasses = el.querySelector("td:first-child").classList;
-  return tdClasses.contains("win") || tdClasses.contains("winTitle");
+const Fight = function(el) {
+  const isWin = () => {
+    const tdClasses = el.querySelector("td:first-child").classList;
+    return tdClasses.contains("win") || tdClasses.contains("winTitle");
+  };
+
+  const getResultType = () => {
+    return getCellText(5);
+  };
+
+  const getOrganization = () => {
+    return getCellText(7);
+  };
+
+  const getStyle = () => {
+    return getCellText(1);
+  };
+
+  const getOpponentName = () => {
+    return el.querySelector("td a").textContent;
+  };
+
+  const getOpponentStyle = () => {
+    return getCellText(3);
+  };
+
+  const getCellText = idx => {
+    return el.querySelectorAll("td").item(idx).textContent;
+  };
+
+  return {
+    isWin: isWin,
+    getResultType: getResultType,
+    getOrganization: getOrganization,
+    getStyle: getStyle,
+    getOpponentName: getOpponentName,
+    getOpponentStyle: getOpponentStyle
+  };
 };
 
 /**
- * Get record rows from DOM
+ * Create array of Fight objects from results table
  */
 const getRecordRows = () => {
   let recordTable = document.querySelectorAll(".record tr:not(:first-child)");
 
-  return recordTable.length === 0 ? false : recordTable;
+  if (recordTable.length === 0) {
+    return false;
+  }
+
+  const FightCollection = [];
+  recordTable.forEach(tr => {
+    FightCollection.push(new Fight(tr));
+  });
+
+  return FightCollection;
 };
 
 /**
  * Create record breakdown object
  *
- * @param {NodeList} rows List of table rows
+ * @param {Array} fights Array of Fight instances
  */
-const recordBreakdown = rows => {
+const recordBreakdown = fights => {
   const breakdown = {
     wins: {
       decision: 0,
@@ -63,9 +107,9 @@ const recordBreakdown = rows => {
     }
   };
 
-  rows.forEach((el, idx) => {
-    const key = isWin(el) ? "wins" : "losses";
-    const result = el.querySelectorAll("td").item(5).textContent;
+  fights.forEach(fight => {
+    const key = fight.isWin() ? "wins" : "losses";
+    const result = fight.getResultType();
     let resultKey = "ko";
 
     if (result.indexOf("Decision") >= 0) {
@@ -126,14 +170,14 @@ const createRecordBreakdownMarkup = breakdown => {
 /**
  * Create record by organization object
  *
- * @param {NodeList} rows List of table rows
+ * @param {Array} fights Array of Fight objects
  */
-const recordByOrganization = rows => {
+const recordByOrganization = fights => {
   const record = [];
 
-  rows.forEach((el, idx) => {
-    const key = isWin(el) ? "wins" : "losses";
-    const organization = el.querySelectorAll("td").item(7).textContent;
+  fights.forEach(fight => {
+    const key = fight.isWin() ? "wins" : "losses";
+    const organization = fight.getOrganization();
 
     if (typeof record[organization] === "undefined") {
       record[organization] = {
@@ -172,14 +216,14 @@ const createRecordByOrganizationMarkup = record => {
 /**
  * Create nemesis list.
  *
- * @param {NodeList} rows List of table rows
+ * @param {Array} fights Array of Fight objects
  */
-const nemesisList = rows => {
+const nemesisList = fights => {
   const record = [];
 
-  rows.forEach(el => {
-    const key = isWin(el) ? "wins" : "losses";
-    const opponent = el.querySelector("td a").textContent;
+  fights.forEach(fight => {
+    const key = fight.isWin() ? "wins" : "losses";
+    const opponent = fight.getOpponentName();
 
     if (typeof record[opponent] === "undefined") {
       record[opponent] = {
@@ -232,9 +276,9 @@ const createNemesisListMarkup = nemesisList => {
 /**
  * Calculate streaks object
  *
- * @param {NodeList} rows List of table rows
+ * @param {Array} fights Array of Fight objects
  */
-const streaks = rows => {
+const streaks = fights => {
   const record = {
     wins: 0,
     losses: 0
@@ -243,8 +287,8 @@ const streaks = rows => {
   let lastResult = false;
   let currentStreak = 0;
 
-  rows.forEach(el => {
-    let key = isWin(el) ? "wins" : "losses";
+  fights.forEach(fight => {
+    let key = fight.isWin() ? "wins" : "losses";
     currentStreak = lastResult === key ? currentStreak + 1 : 1;
     lastResult = key;
 
@@ -279,14 +323,14 @@ const createStreaksMarkup = streaks => {
 /**
  * Calculate style breakdown
  *
- * @param {NodeList} rows List of table rows
+ * @param {Array} fights Array of Fight objects
  */
-const styleBreakdown = rows => {
+const styleBreakdown = fights => {
   const styles = {};
 
-  rows.forEach(el => {
-    const style = el.querySelectorAll("td").item(1).textContent;
-    const opponentStyle = el.querySelectorAll("td").item(3).textContent;
+  fights.forEach(fight => {
+    const style = fight.getStyle();
+    const opponentStyle = fight.getOpponentStyle();
 
     if (typeof styles[style] === "undefined") {
       styles[style] = {};
@@ -299,7 +343,7 @@ const styleBreakdown = rows => {
       };
     }
 
-    styles[style][opponentStyle][isWin(el) ? "wins" : "losses"]++;
+    styles[style][opponentStyle][fight.isWin() ? "wins" : "losses"]++;
   });
 
   return styles;
