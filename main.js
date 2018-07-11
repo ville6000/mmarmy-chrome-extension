@@ -19,6 +19,8 @@ const init = () => {
 
   container.appendChild(createStreaksMarkup(streaks(rows)));
 
+  container.appendChild(createTitleFightStats(titleFightStats(rows)));
+
   container.appendChild(createStyleBreakdownMarkup(styleBreakdown(rows)));
 
   const recordTable = document.querySelectorAll(".record");
@@ -31,9 +33,18 @@ const init = () => {
  * @param {Node} el Table row
  */
 const Fight = function(el) {
+  const getFightClass = () => {
+    return el.querySelector("td:first-child").classList;
+  };
+
   const isWin = () => {
-    const tdClasses = el.querySelector("td:first-child").classList;
+    const tdClasses = getFightClass();
     return tdClasses.contains("win") || tdClasses.contains("winTitle");
+  };
+
+  const isTitleFight = () => {
+    const tdClasses = getFightClass();
+    return tdClasses.contains("lossTitle") || tdClasses.contains("winTitle");
   };
 
   const getResultType = () => {
@@ -62,6 +73,7 @@ const Fight = function(el) {
 
   return {
     isWin: isWin,
+    isTitleFight: isTitleFight,
     getResultType: getResultType,
     getOrganization: getOrganization,
     getStyle: getStyle,
@@ -395,6 +407,47 @@ const createStyleBreakdownMarkup = styles => {
   });
 
   container.appendChild(table);
+
+  return container;
+};
+
+/**
+ * Create title fights object
+ *
+ * @param {Array} fights Array of Fight objects
+ */
+const titleFightStats = fights => {
+  const titleFights = {
+    wins: 0,
+    losses: 0
+  };
+
+  fights.forEach(fight => {
+    if (fight.isTitleFight()) {
+      const key = fight.isWin() ? "wins" : "losses";
+      titleFights[key]++;
+    }
+  });
+
+  return titleFights;
+};
+
+/**
+ * Create title fights markup
+ *
+ * @param {object} titleFights
+ */
+const createTitleFightStats = titleFights => {
+  const container = document.createElement("div");
+  const title = document.createElement("h4");
+  title.textContent = "Title Fights";
+  container.appendChild(title);
+
+  Object.keys(titleFights).forEach(key => {
+    let item = document.createElement("div");
+    item.textContent = `${key}: ${titleFights[key]}`;
+    container.appendChild(item);
+  });
 
   return container;
 };
