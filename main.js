@@ -8,6 +8,8 @@ const init = () => {
     return;
   }
   const container = document.createElement("div");
+  container.style =
+    "display: flex;flex-wrap: wrap;justify-content:  space-between;";
 
   container.appendChild(createRecordBreakdownMarkup(recordBreakdown(rows)));
 
@@ -67,6 +69,10 @@ const Fight = function(el) {
     return getCellText(3);
   };
 
+  const getOpponentUrl = () => {
+    return el.querySelector("td a").href;
+  };
+
   const getCellText = idx => {
     return el.querySelectorAll("td").item(idx).textContent;
   };
@@ -78,7 +84,8 @@ const Fight = function(el) {
     getOrganization: getOrganization,
     getStyle: getStyle,
     getOpponentName: getOpponentName,
-    getOpponentStyle: getOpponentStyle
+    getOpponentStyle: getOpponentStyle,
+    getOpponentUrl: getOpponentUrl
   };
 };
 
@@ -236,11 +243,13 @@ const nemesisList = fights => {
   fights.forEach(fight => {
     const key = fight.isWin() ? "wins" : "losses";
     const opponent = fight.getOpponentName();
+    const opponentUrl = fight.getOpponentUrl();
 
     if (typeof record[opponent] === "undefined") {
       record[opponent] = {
         wins: 0,
-        losses: 0
+        losses: 0,
+        url: opponentUrl
       };
     }
 
@@ -275,9 +284,17 @@ const createNemesisListMarkup = nemesisList => {
 
   Object.keys(nemesisList).forEach(key => {
     let item = document.createElement("div");
-    item.textContent = `${key}: ${nemesisList[key].wins} - ${
+
+    const opponentLink = document.createElement("a");
+    opponentLink.href = nemesisList[key].url;
+    opponentLink.textContent = key;
+    item.appendChild(opponentLink);
+
+    const stats = document.createElement("span");
+    stats.textContent = `: ${nemesisList[key].wins} - ${
       nemesisList[key].losses
     }`;
+    item.appendChild(stats);
 
     container.appendChild(item);
   });
