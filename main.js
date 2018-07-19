@@ -150,6 +150,7 @@ const recordBreakdown = fights => {
  */
 const createRecordBreakdownMarkup = breakdown => {
   const container = document.createElement("div");
+  container.style = "padding: 10px;";
 
   const lossTitle = document.createElement("h4");
   lossTitle.textContent = "Losses";
@@ -218,6 +219,8 @@ const recordByOrganization = fights => {
  */
 const createRecordByOrganizationMarkup = record => {
   const container = document.createElement("div");
+  container.style = "padding: 10px;";
+
   const title = document.createElement("h4");
   title.textContent = "Record by Organization";
   container.appendChild(title);
@@ -273,6 +276,7 @@ const nemesisList = fights => {
  */
 const createNemesisListMarkup = nemesisList => {
   const container = document.createElement("div");
+  container.style = "padding: 10px;";
 
   if (Object.keys(nemesisList).length === 0) {
     return container;
@@ -336,6 +340,8 @@ const streaks = fights => {
  */
 const createStreaksMarkup = streaks => {
   const container = document.createElement("div");
+  container.style = "padding: 10px;";
+
   const title = document.createElement("h4");
   title.textContent = "Streaks";
   container.appendChild(title);
@@ -385,6 +391,8 @@ const styleBreakdown = fights => {
  */
 const createStyleBreakdownMarkup = styles => {
   const container = document.createElement("div");
+  container.style = "padding: 10px;";
+
   const title = document.createElement("h4");
   title.textContent = "Style Breakdown";
   container.appendChild(title);
@@ -456,6 +464,8 @@ const titleFightStats = fights => {
  */
 const createTitleFightStats = titleFights => {
   const container = document.createElement("div");
+  container.style = "padding: 10px;";
+
   const title = document.createElement("h4");
   title.textContent = "Title Fights";
   container.appendChild(title);
