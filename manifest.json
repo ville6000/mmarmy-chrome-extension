@@ -1,25 +1,25 @@
 {   
-    "name": "MMArmy", 
-    "version": "1.0", 
-    "description": "MMArmy", 
-    "manifest_version": 2,
-"permissions": ["activeTab", "declarativeContent"],
-"icons": {
-      "16": "images/poop_16.png",
-      "32": "images/poop_32.png",
-      "48": "images/poop_48.png",
-      "128": "images/poop_128.png"
-    },
-"page_action": { 
-      "default_icon": {
-        "16": "images/poop_16.png",
-        "32": "images/poop_32.png",
-        "48": "images/poop_48.png",
-        "128": "images/poop_128.png"
-      }
-    },
-"background": {
-      "scripts": ["scripts.js"],
-      "persistent": false
+  "name": "MMArmy", 
+  "version": "1.0", 
+  "description": "MMArmy", 
+  "manifest_version": 2,
+  "permissions": ["activeTab", "declarativeContent"],
+  "icons": {
+    "16": "images/wrestling-16x16.png",
+    "32": "images/wrestling-32x32.png",
+    "64": "images/wrestling-64x64.png",
+    "128": "images/wrestling-128x128.png"
+  },
+  "page_action": { 
+    "default_icon": {
+      "16": "images/wrestling-16x16.png",
+      "32": "images/wrestling-32x32.png",
+      "64": "images/wrestling-64x64.png",
+      "128": "images/wrestling-128x128.png"
     }
+  },
+  "background": {
+    "scripts": ["scripts.js"],
+    "persistent": false
+  }
 }
