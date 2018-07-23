@@ -50,11 +50,11 @@ const Fight = function(el) {
   };
 
   const getResultType = () => {
-    return getCellText(6);
+    return getCellText(isLoggedInUser() ? 6 : 5);
   };
 
   const getOrganization = () => {
-    return getCellText(8);
+    return getCellText(isLoggedInUser() ? 8 : 7);
   };
 
   const getStyle = () => {
@@ -66,7 +66,7 @@ const Fight = function(el) {
   };
 
   const getOpponentStyle = () => {
-    return getCellText(4);
+    return getCellText(isLoggedInUser() ? 4 : 3);
   };
 
   const getOpponentUrl = () => {
@@ -75,6 +75,10 @@ const Fight = function(el) {
 
   const getCellText = idx => {
     return el.querySelectorAll("td").item(idx).textContent;
+  };
+
+  const isLoggedInUser = () => {
+    return el.querySelectorAll("td").length === 10;
   };
 
   return {
