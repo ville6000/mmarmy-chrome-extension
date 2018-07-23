@@ -50,11 +50,11 @@ const Fight = function(el) {
   };
 
   const getResultType = () => {
-    return getCellText(5);
+    return getCellText(6);
   };
 
   const getOrganization = () => {
-    return getCellText(7);
+    return getCellText(8);
   };
 
   const getStyle = () => {
@@ -66,7 +66,7 @@ const Fight = function(el) {
   };
 
   const getOpponentStyle = () => {
-    return getCellText(3);
+    return getCellText(4);
   };
 
   const getOpponentUrl = () => {
