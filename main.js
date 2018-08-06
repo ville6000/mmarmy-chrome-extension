@@ -402,6 +402,7 @@ const createStyleBreakdownMarkup = styles => {
   container.appendChild(title);
 
   const table = document.createElement("table");
+  table.style = "font-size: 12px;";
 
   Object.keys(styles).forEach(styleKey => {
     Object.keys(styles[styleKey]).forEach(opponenStyleKey => {
