@@ -25,6 +25,8 @@ const init = () => {
 
   container.appendChild(createStyleBreakdownMarkup(styleBreakdown(rows)));
 
+  addStatsToRecordTable();
+
   const recordTable = document.querySelectorAll(".record");
   document.querySelector(".middle .b").insertBefore(container, recordTable[0]);
 };
@@ -482,6 +484,29 @@ const createTitleFightStats = titleFights => {
   });
 
   return container;
+};
+
+const addStatsToRecordTable = () => {
+  const rows = document.querySelectorAll(".record tr:not(:first-child)");
+  const record = { wins: 0, losses: 0 };
+
+  for (let i = rows.length - 1; i >= 0; i--) {
+    const fight = new Fight(rows[i]);
+
+    if (fight.isWin()) {
+      record.wins++;
+    } else {
+      record.losses++;
+    }
+
+    const cell = document.createElement("td");
+    cell.textContent = `${record.wins} - ${record.losses}`;
+    cell.style = "width: 45px;";
+    rows[i].prepend(cell);
+  }
+
+  const headingRow = document.querySelector(".record tr:first-child");
+  headingRow.prepend(document.createElement("th"));
 };
 
 init();
