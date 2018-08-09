@@ -486,6 +486,9 @@ const createTitleFightStats = titleFights => {
   return container;
 };
 
+/**
+ * Add numerical record to record table
+ */
 const addStatsToRecordTable = () => {
   const rows = document.querySelectorAll(".record tr:not(:first-child)");
   const record = { wins: 0, losses: 0 };
