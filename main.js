@@ -21,7 +21,7 @@ const init = () => {
 
   container.appendChild(createStreaksMarkup(streaks(rows)));
 
-  container.appendChild(createTitleFightStats(titleFightStats(rows)));
+  container.appendChild(createTitleFightStatsMarkup(titleFightStats(rows)));
 
   container.appendChild(createStyleBreakdownMarkup(styleBreakdown(rows)));
 
@@ -469,7 +469,7 @@ const titleFightStats = fights => {
  *
  * @param {object} titleFights
  */
-const createTitleFightStats = titleFights => {
+const createTitleFightStatsMarkup = titleFights => {
   const container = document.createElement("div");
   container.style = "padding: 10px;";
 
