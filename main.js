@@ -25,6 +25,8 @@ const init = () => {
 
   container.appendChild(createStyleBreakdownMarkup(styleBreakdown(rows)));
 
+  container.appendChild(createYearlyFightsMarkup(yearlyFights(rows)));
+
   addStatsToRecordTable();
 
   const recordTable = document.querySelectorAll(".record");
@@ -75,6 +77,12 @@ const Fight = function(el) {
     return el.querySelector("td a").href;
   };
 
+  const getFightYear = () => {
+    let year = getCellText(el.querySelectorAll("td").length - 1);
+
+    return year.substring(4);
+  };
+
   const getCellText = idx => {
     return el.querySelectorAll("td").item(idx).textContent;
   };
@@ -91,7 +99,8 @@ const Fight = function(el) {
     getStyle: getStyle,
     getOpponentName: getOpponentName,
     getOpponentStyle: getOpponentStyle,
-    getOpponentUrl: getOpponentUrl
+    getOpponentUrl: getOpponentUrl,
+    getFightYear: getFightYear
   };
 };
 
@@ -480,6 +489,49 @@ const createTitleFightStatsMarkup = titleFights => {
   Object.keys(titleFights).forEach(key => {
     let item = document.createElement("div");
     item.textContent = `${key}: ${titleFights[key]}`;
+    container.appendChild(item);
+  });
+
+  return container;
+};
+
+/**
+ * Create yearly fights object
+ *
+ * @param {Array} fights Array of Fight objects
+ */
+const yearlyFights = fights => {
+  const years = {};
+
+  fights.forEach(fight => {
+    const year = fight.getFightYear();
+
+    if (typeof years[year] === "undefined") {
+      years[year] = 0;
+    }
+
+    years[year]++;
+  });
+
+  return years;
+};
+
+/**
+ * Create yearly fights markup
+ *
+ * @param {object} years
+ */
+const createYearlyFightsMarkup = years => {
+  const container = document.createElement("div");
+  container.style = "padding: 10px;";
+
+  const title = document.createElement("h4");
+  title.textContent = "Yearly Fights";
+  container.appendChild(title);
+
+  Object.keys(years).forEach(key => {
+    let item = document.createElement("div");
+    item.textContent = `${key}: ${years[key]}`;
     container.appendChild(item);
   });
 
